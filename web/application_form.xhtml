@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough">
+    <h:head>
+        <title>Application Form</title>
+    </h:head>
+    <h:body>
+        <h:form>
+            <div><br/>
+                <p:outputLabel    value="First Name " for="fName" /> <br/> <br/>
+                <p:inputText a:autofocus="true" id="fName" value="#{userBean.firstName}" a:placeholder="First name" required="true" /> 
+            </div>
+
+            <div><br/>
+                <p:outputLabel    value="Last Name " for="lName" />  <br/> <br/>
+                <p:inputText id="lName" value="#{userBean.lastName}" a:placeholder="Last name" required="true" /> 
+            </div>
+            <div >
+                <p:outputLabel value="Phone Number " for="phone" /> <br/> <br/>
+                <p:inputText id="phone" value="#{userBean.phoneNumber}" a:placeholder="Phone Number"  required="true" /> 
+            </div>
+
+            <div >
+                <p:outputLabel value="Email: " for="email" /> <br/> <br/>
+                <p:inputText id="email" value="#{userBean.email}" a:placeholder="Valid Email" required="true" />  
+            </div>
+            <div><br/>
+                <p:outputLabel value="Cover Letter " for="cvLetter" />  <br/> <br/>
+                <p:inputTextarea id="cvLeter" value="#{userBean.coverLetter}" a:placeholder="Type Your Cover Letter Here"  required="true" /> 
+            </div>
+
+            <div >
+                <p:growl id="passportMsg" showDetail="true" />
+
+                <p:fileUpload value="#{userBean.passport}" mode="simple"/>
+
+
+            </div><br/>
+            </div><br/><div>
+                <p:growl id="resumeMsg" showDetail="true" />
+
+                <p:fileUpload value="#{userBean.resume}" mode="simple" />
+
+
+            </div><br/>
+
+            <p class="form-tag">
+                <h:commandButton class="form-btn" value="Register" action="#{userBean.save()}"/>
+            </p> 
+        </h:form>
+    </h:body>
+</html>
+

@@ -2,6 +2,8 @@ package adio.group.controller;
 
 import adio.group.model.Users;
 import adio.group.service.UserService;
+import adio.group.utils.FileUploadService;
+import java.sql.SQLException;
 import java.util.List;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
@@ -37,12 +39,20 @@ public class UsersBean {
 
     @Autowired
     private UserService userService;
+    
+    @Autowired
+    private FileUploadService fileUploadService;
 
     public UsersBean() {
     }
 
-    public String save() {
+    public String save() throws SQLException {
+        if(passport.getSize() >0 && resume.getSize() > 0){
         userService.save();
+        }else{
+            FacesMessage massage = new FacesMessage("Must choose a file");
+            FacesContext.getCurrentInstance().addMessage(null, massage);
+        }
         return "succes";
     }
 
@@ -66,6 +76,12 @@ public class UsersBean {
 
     }
 
+    public void passportUpload() throws SQLException{
+        fileUploadService.passportUpload();
+    }
+    public void resume() throws SQLException{
+        fileUploadService.resume();
+    }
     public String getFirstName() {
         return firstName;
     }

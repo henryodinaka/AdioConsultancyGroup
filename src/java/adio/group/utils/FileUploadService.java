@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,30 +34,33 @@ public class FileUploadService {
 
     @Autowired
     UsersBean userBean;
+    @Autowired
+    ServletContext context;
     private Session session;
     Users user;
     Query query;
 
     //this is the path to upload the file on the server
-    Path folder;
-    String relativePath = "Images/profile/";
-    String fileName;
-    Path file;
-    String extension;
+    String relPathPassport = "files/passport/";
+    String relPathResume = "/files/resume/";
+
+    final static String ROOT = System.getProperty("user.dir");
 
     public String passportUpload() throws SQLException {
-        folder = Paths.get("C:/AdioConsultancyGroup/web/file/");
-        fileName = FilenameUtils.getBaseName(userBean.getPassport().getFileName());
-        extension = FilenameUtils.getExtension(userBean.getPassport().getFileName());
+        String absolutePath = context.getRealPath("files/passport");
+        String passportPath = ROOT + relPathPassport;
+        Path folder = Paths.get(absolutePath);
+        String fileName = FilenameUtils.getBaseName(userBean.getPassport().getFileName());
+        String extension = FilenameUtils.getExtension(userBean.getPassport().getFileName());
         String filePath = null;
         if (checkPassPortSize()) {
-            if (extension.equals("jpeg") || extension.equals("JPEG")) {
+            if (extension.equals("jpg") || extension.equals("jpeg")) {
                 try {
-                    file = Files.createTempFile(folder, fileName + "-", "." + extension);
+                    Path file = Files.createTempFile(folder, fileName + "-", "." + extension);
 
                     InputStream inputStream = userBean.getPassport().getInputstream();
                     Files.copy(inputStream, file, StandardCopyOption.REPLACE_EXISTING);
-                    filePath = relativePath + file.getFileName();
+                    filePath = relPathPassport + file.getFileName();
 
                     System.out.println("Checking the file path " + filePath);
 
@@ -76,18 +80,20 @@ public class FileUploadService {
     }
 
     public String resume() throws SQLException {
-        folder = Paths.get("C:/AdioConsultancyGroup/web/file/");
-        fileName = FilenameUtils.getBaseName(userBean.getPassport().getFileName());
-        extension = FilenameUtils.getExtension(userBean.getPassport().getFileName());
+        String resumePath = ROOT + relPathResume;
+        System.out.println("The root path is " + resumePath);
+        Path folder = Paths.get(resumePath);
+        String fileName = FilenameUtils.getBaseName(userBean.getResume().getFileName());
+        String extension = FilenameUtils.getExtension(userBean.getResume().getFileName());
         String filePath = null;
         if (checkResumeSize()) {
             if (extension.equals("pdf") || extension.equals("doc") || extension.equals("docx")) {
                 try {
-                    file = Files.createTempFile(folder, fileName + "-", "." + extension);
+                    Path file = Files.createTempFile(folder, fileName + "-", "." + extension);
 
                     InputStream inputStream = userBean.getPassport().getInputstream();
                     Files.copy(inputStream, file, StandardCopyOption.REPLACE_EXISTING);
-                    filePath = relativePath + file.getFileName();
+                    filePath = relPathResume + file.getFileName();
 
                     System.out.println("Checking the file path " + filePath);
 
@@ -95,6 +101,7 @@ public class FileUploadService {
                     System.err.println("File not uploaded, IOException caught " + ioex);
                 }
                 userBean.setResumePath(filePath);
+
                 return "success";
             } else {
 
@@ -150,7 +157,7 @@ public class FileUploadService {
     public List<Users> allImage() {
         List<Users> imageList = null;
         session = sessionFactory.getCurrentSession();
-        query = session.createQuery("FROM ImageFile");
+        query = session.createQuery("FROM Users");
         imageList = query.list();
         return imageList;
     }

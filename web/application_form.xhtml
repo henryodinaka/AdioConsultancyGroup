@@ -8,9 +8,9 @@
         <title>Application Form</title>
     </h:head>
     <h:body>
-        <h:form>
+        <h:form enctype="multipart/form-data" >
             <div><br/>
-                <p:outputLabel    value="First Name " for="fName" /> <br/> <br/>
+                <p:outputLabel value="First Name " for="fName" /> <br/> <br/>
                 <p:inputText a:autofocus="true" id="fName" value="#{userBean.firstName}" a:placeholder="First name" required="true" /> 
             </div>
 
@@ -29,27 +29,34 @@
             </div>
             <div><br/>
                 <p:outputLabel value="Cover Letter " for="cvLetter" />  <br/> <br/>
-                <p:inputTextarea id="cvLeter" value="#{userBean.coverLetter}" a:placeholder="Type Your Cover Letter Here"  required="true" /> 
+                <p:inputTextarea id="cvLetter" value="#{userBean.coverLetter}" a:placeholder="Type Your Cover Letter Here"  required="true" /> 
             </div>
 
             <div >
+                <p:outputLabel value="Upload passport" for="passport" />  <br/> <br/>
                 <p:growl id="passportMsg" showDetail="true" />
-
-                <p:fileUpload value="#{userBean.passport}" mode="simple"/>
-
+ 
+                <p:fileUpload id="passport" value="#{userBean.passport}" mode="simple"/>
+                <!--<p:ajax event="keyup" update="outPassport" listener="{userBean.passportPath()}"/>-->  
+                
 
             </div><br/>
-            </div><br/><div>
+            <div>
+                <p:outputLabel value="Upload resume" for="resume" />  <br/> <br/>
                 <p:growl id="resumeMsg" showDetail="true" />
-
-                <p:fileUpload value="#{userBean.resume}" mode="simple" />
+ 
+                <p:fileUpload id="resume" value="#{userBean.resume}"  mode="simple" />
+                <!--<p:ajax event="keyup" update="outResume" listener="{userBean.resume()}"/>--> 
+                
+                
+               
 
 
             </div><br/>
 
-            <p class="form-tag">
-                <h:commandButton class="form-btn" value="Register" action="#{userBean.save()}"/>
-            </p> 
+            <p>
+                <h:commandButton value="Register" action="#{userBean.save()}"/>
+            </p>
         </h:form>
     </h:body>
 </html>

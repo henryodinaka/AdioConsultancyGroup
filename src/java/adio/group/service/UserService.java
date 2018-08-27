@@ -2,6 +2,8 @@ package adio.group.service;
 
 import adio.group.controller.UsersBean;
 import adio.group.model.Users;
+import adio.group.utils.FileUploadService;
+import java.sql.SQLException;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.hibernate.Query;
@@ -27,7 +29,8 @@ public class UserService {
     private UsersBean userBean;
     @Autowired 
     private SessionFactory sessionFactory;
-    
+    @Autowired
+    FileUploadService fileService;
     private Users user;
     private List<Users> userList;
 
@@ -37,28 +40,27 @@ public class UserService {
     private Query query;
     int quryResult = 0;
     int role = 0;
-    public String save(){
-        if (!userBean.getFirstName().isEmpty() && !userBean.getLastName().isEmpty() && !userBean.getPhoneNumber().isEmpty()) {
+    public String save() throws SQLException{
+        fileService.resume();
+        fileService.passportUpload(); 
 
-            user = new Users(
-                    userBean.getFirstName(),
-                    userBean.getLastName(),
-                    userBean.getEmail(),
-                    userBean.getPhoneNumber(),
-                    userBean.getCoverLetter(),
-                    userBean.getResumePath(),
-                    userBean.getPassportPath(),
-                    ROLE_USER
-            );
-
-            session = sessionFactory.getCurrentSession();
-            session.save(user);
-            return "login";
-        } else {
-            userBean.setMessage("All fields must be filled");
-            return "user_form";
+//            user = new Users(
+//                    userBean.getFirstName(),
+//                    userBean.getLastName(),
+//                    userBean.getEmail(),
+//                    userBean.getPhoneNumber(),
+//                    userBean.getCoverLetter(),
+//                    userBean.getResumePath(),
+//                    userBean.getPassportPath(),
+//                    ROLE_USER
+//            );
+//
+//            session = sessionFactory.getCurrentSession();
+//            session.save(user);
+            return "index";
+         
         }
-    }
+    
     
     
     public List<Users> viewUser() {
